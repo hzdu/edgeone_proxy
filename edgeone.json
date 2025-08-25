@@ -1,17 +1,33 @@
 {
   "rewrites": [
     {
-      "source": "/:path*",
-      "destination": "https://github.ctnis.com/:path*"
+      "source": "/api/:path*",
+      "destination": "https://api.github.com/:path*"
+    },
+    {
+      "source": "/raw/:path*",
+      "destination": "https://raw.githubusercontent.com/:path*"
+    },
+    {
+      "source": "/archive/:path*",
+      "destination": "https://github.com/:path*"
     }
   ],
   "headers": [
     {
-      "source": "/:path*",
+      "source": "/api/:path*",
       "headers": [
         {
           "key": "Access-Control-Allow-Origin",
           "value": "*"
+        },
+        {
+          "key": "Access-Control-Allow-Methods",
+          "value": "GET, HEAD, POST, OPTIONS"
+        },
+        {
+          "key": "Access-Control-Allow-Headers",
+          "value": "Content-Type, Authorization"
         }
       ]
     }
