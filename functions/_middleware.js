@@ -4,6 +4,7 @@ export async function onRequest(context) {
   // 1. 获取原始的请求对象
   const { request } = context;
   const url = new URL(request.url);
+  console.log(url);
 
   // 2. 定义我们的唯一目标域名
   const targetDomain = 'github.ctnis.com';
@@ -11,6 +12,7 @@ export async function onRequest(context) {
   // 3. 构建发往目标服务器的新 URL
   // 我们保留了原始请求的路径和查询参数
   const targetUrl = new URL(url.pathname + url.search, `https://${targetDomain}`);
+  console.log(targetUrl);
 
   // 4. 创建一个新的请求对象，用于转发
   // 直接传入原始的 request 对象，可以高效地复制 method, body, headers 等
