@@ -1,29 +1,32 @@
 // functions/_middleware.js
 
 export async function onRequest(context) {
-  // 1. 获取原始的请求对象
   const { request } = context;
   const url = new URL(request.url);
-  console.log(url);
 
-  // 2. 定义我们的唯一目标域名
-  const targetDomain = 'github.ctnis.com';
+  // ====================== 调试探针 ======================
+  // 1. 我们添加一个特殊的路径 "/ping"。
+  // 如果访问这个路径，函数必须返回 "Pong!"。
+  // 这可以 100% 确认函数是否被平台执行了。
+  if (url.pathname === '/ping') {
+    return new Response('Pong! The EdgeOne function is running correctly.', { status: 200 });
+  }
+  // ======================================================
 
-  // 3. 构建发往目标服务器的新 URL
-  // 我们保留了原始请求的路径和查询参数
-  const targetUrl = new URL(url.pathname + url.search, `https://${targetDomain}`);
-  console.log(targetUrl);
+  // 2. 如果不是 /ping，则执行之前的代理逻辑
+  // 我们在代理逻辑外层包裹一个 try...catch，以便捕获任何潜在的错误
+  try {
+    const targetDomain = 'github.ctnis.com';
+    const targetUrl = new URL(url.pathname + url.search, `https://${targetDomain}`);
+    const upstreamRequest = new Request(targetUrl, request);
+    upstreamRequest.headers.set('Host', targetDomain);
 
-  // 4. 创建一个新的请求对象，用于转发
-  // 直接传入原始的 request 对象，可以高效地复制 method, body, headers 等
-  const upstreamRequest = new Request(targetUrl, request);
+    // 发起代理请求
+    return await fetch(upstreamRequest);
 
-  // 5. 关键一步：设置正确的 Host 请求头
-  // 确保目标服务器（您的 Cloudflare Pages）收到它期望的 Host
-  upstreamRequest.headers.set('Host', targetDomain);
-
-  // 6. 发起代理请求，并直接返回响应
-  // fetch() 会返回一个 Response 对象，我们可以直接将其返回给客户端
-  // 无需再手动处理 body 和 headers，除非需要修改它们
-  return fetch(upstreamRequest);
+  } catch (error) {
+    // 3. 如果代理过程中出现任何错误，我们不再沉默地失败，
+    // 而是将错误信息明确地返回给用户。
+    return new Response(`An error occurred in the proxy function: ${error.message}`, { status: 502 });
+  }
 }
