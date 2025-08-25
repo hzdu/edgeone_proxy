@@ -11,6 +11,11 @@
     {
       "source": "/archive/(.*)",
       "destination": "https://github.com/$1"
+    },
+    {
+      "source": "/((?!api|raw|archive).*)",
+      "destination": "/index.html",
+      "status": 200
     }
   ],
   "headers": [
