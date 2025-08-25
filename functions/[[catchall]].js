@@ -21,6 +21,10 @@ export async function onRequest(context) {
     targetDomain = '60s.ctnis.com';
     // 截取 "/60s/" 后面的部分
     strippedPath = path.substring('/60s/'.length);
+  } else if (path.startsWith('/api/')) {
+    targetDomain = 'joyhubapi.ctnis.com';
+    // 截取 "/60s/" 后面的部分
+    strippedPath = path.substring('/api/'.length);
   }
 
   // 2. 如果成功匹配到一个前缀
