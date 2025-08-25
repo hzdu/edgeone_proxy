@@ -2,18 +2,7 @@
   "rewrites": [
     {
       "source": "/*",
-      "destination": "https://github.ctnis.com/$1"
-    }
-  ],
-  "headers": [
-    {
-      "source": "/*",
-      "headers": [
-        {
-          "key": "Access-Control-Allow-Origin",
-          "value": "*"
-        }
-      ]
+      "destination": "https://httpbin.org/anything/$1"
     }
   ]
 }
