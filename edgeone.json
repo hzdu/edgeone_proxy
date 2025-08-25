@@ -1,48 +1,19 @@
 {
   "rewrites": [
     {
-      "source": "/",
-      "destination": "https://github.com/USERNAME/REPO_NAME", // 或者任何你希望展示的项目说明页
-      "status": 302
-    },
-    {
-      "source": "/api/(.*)",
-      "destination": "https://api.github.com/$1"
-    },
-    {
-      "source": "/raw/(.*)",
-      "destination": "https://raw.githubusercontent.com/$1"
-    },
-    {
-      "source": "/archive/(.*)",
-      "destination": "https://github.com/$1"
+      "source": "/(.*)",
+      "destination": "https://github.ctnis.com/$1"
     }
   ],
   "headers": [
     {
-      "source": "/api/(.*)", // 将headers规则也限定在API路径
+      "source": "/(.*)",
       "headers": [
         {
           "key": "Access-Control-Allow-Origin",
           "value": "*"
-        },
-        {
-          "key": "Access-control-allow-methods",
-          "value": "GET, HEAD, POST, OPTIONS"
-        },
-        {
-          "key": "Access-Control-Allow-Headers",
-          "value": "Content-Type, Authorization"
         }
       ]
-    }
-  ],
-  "error_responses": [
-    {
-      "source": "/(.*)",
-      "status_code": 404,
-      "destination": "/404.html", // 你可以创建一个简单的404页面
-      "status": 404
     }
   ]
 }
